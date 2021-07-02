@@ -1,10 +1,29 @@
-from flask import Flask
+from flask import Flask, jsonify, render_template, request
 import time
 
 app = Flask(__name__)  # Class handle to call Flask API
+
+labels = [
+    'JAN', 'FEB', 'MAR', 'APR',
+    'MAY', 'JUN', 'JUL', 'AUG',
+    'SEP', 'OCT', 'NOV', 'DEC'
+]
+
+values = [
+    967.67, 1190.89, 1079.75, 1349.19,
+    2328.91, 2504.28, 2873.83, 4764.87,
+    4349.29, 6458.30, 9907, 16297
+]
+
+
 @app.route('/')  # Decorator function - wraps a function for Flask to operate - maps url to return value
 def main_page():
-    return 'Chilly Dog Web Monitor'
+    line_labels = labels
+    line_values = values
+    return render_template('graph.html', title='Chilly Dog Web Monitor', max=17000, labels=line_labels,
+                           values=line_values)
+    # return render_template('graph.html')
+
 
 
 
