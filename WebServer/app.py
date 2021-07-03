@@ -3,25 +3,22 @@ import time
 
 app = Flask(__name__)  # Class handle to call Flask API
 
-labels = [
-    'JAN', 'FEB', 'MAR', 'APR',
-    'MAY', 'JUN', 'JUL', 'AUG',
-    'SEP', 'OCT', 'NOV', 'DEC'
-]
-
-values = [
-    967.67, 1190.89, 1079.75, 1349.19,
-    2328.91, 2504.28, 2873.83, 4764.87,
-    4349.29, 6458.30, 9907, 16297
-]
-
 
 @app.route('/')  # Decorator function - wraps a function for Flask to operate - maps url to return value
 def main_page():
-    line_labels = labels
-    line_values = values
-    return render_template('graph.html', title='Chilly Dog Web Monitor', max=17000, labels=line_labels,
-                           values=line_values)
+    tempData = [  # TODO: Temperature data - use dummy data until function calls to Arduino are implemented
+        ("07-03-2021", 75.5),
+        ("07-03-2021", 76.5),
+        ("07-03-2021", 77.5),
+        ("07-03-2021", 78.5),
+        ("07-03-2021", 79.5),
+        ("07-03-2021", 80.5),
+    ]
+    #  Parse out data to be returned and rendered into html/javascript for chart graph on flask web page
+    line_labels = [row[0] for row in tempData]
+    line_values = [row[1] for row in tempData]
+
+    return render_template("graph.html", labels=line_labels, values=line_values)
     # return render_template('graph.html')
 
 
