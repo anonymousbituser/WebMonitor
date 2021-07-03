@@ -7,7 +7,8 @@
   <title>Chilly Dog Web Monitor</title>
   <!--This source will point to an online repository to utilize the chart.min.js API-->
   <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>-->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>-->
+  <script src='\static\chart.min.js'></script>
 </head>
 
 <!--Core entry point for data to be put into-->
@@ -28,7 +29,7 @@
             data: {{ values | safe }},  // Use temp data points for y axis
             fill: false, // TODO: Not sure if I need this - it will show exact resolution on web page?
             borderColor: "rgb(230,230,250)", // Lavender border color - randomly selected
-            lineTension: 0.1  // Determines how "tight" corners will be when joining stretches of lines
+            lineTension: 0.5  // Determines how "tight" corners will be when joining stretches of lines
           }
         ]
       },
