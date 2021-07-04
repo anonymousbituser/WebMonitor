@@ -8,7 +8,8 @@
   <!--This source will point to an online repository to utilize the chart.min.js API-->
   <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>-->
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>-->
-  <script src='\static\chart.min.js'></script>
+  <script src='\static\chart.min.js'></script>  <!-- Javascript Chart API source for charting data-->
+  <script src='\static\jquery.min.js'></script>   <!-- Javascript query API source for dynamic charting-->
 </head>
 
 <!--Core entry point for data to be put into-->
@@ -17,26 +18,162 @@
   <canvas id="tempSensor_chart" width="900" height="400"></canvas>
   <!--Javascript code that will run to perform functional for the chart-->
   <script>
-    // Grab data from web server and graph
-    var dataHandle = document.getElementById("tempSensor_chart").getContext("2d");
-    var tempSensor_chart = new Chart(dataHandle, {
-      type: "line",
-      data: {
-        labels: {{ labels | safe }}, // Utilize string of list that represents the data labels - xaxis -->
-        datasets: [
-          {
-            label: "Temperature (°F) vs. Time (s)",
-            data: {{ values | safe }},  // Use temp data points for y axis
-            fill: false, // TODO: Not sure if I need this - it will show exact resolution on web page?
-            borderColor: "rgb(230,230,250)", // Lavender border color - randomly selected
-            lineTension: 0.5  // Determines how "tight" corners will be when joining stretches of lines
-          }
-        ]
-      },
-      options: {
-        responsive: false  // Tells chart.js to use width and height of canvas to "draw"
-      }
-    });
+
+  // Grab data from web server and graph
+  var dataHandle = document.getElementById("tempSensor_chart").getContext("2d");
+  var chart_data = {
+    type: "line",
+    data: {
+      labels: {{ labels | safe }}, // Utilize string of list that represents the data labels - xaxis -->
+      datasets: [
+        {
+          label: "Temperature (°F) vs. Time (s)",
+          data: {{ values | safe }},  // Use temp data points for y axis
+          fill: false, // TODO: Not sure if I need this - it will show exact resolution on web page?
+          borderColor: "rgb(230,230,250)", // Lavender border color - randomly selected
+          lineTension: 0.5  // Determines how "tight" corners will be when joining stretches of lines
+        }
+      ]
+    },
+    options: {
+      responsive: false  // Tells chart.js to use width and height of canvas to "draw"
+    }
+  };
+  var tempSensor_chart = new Chart(dataHandle, chart_data);
+
+
+  //setInterval('updateGraph()', 2000);  // Setup the ajax timing frequency in which calls should be made to update the graph of interest
+
+    // TODO: Start
+    // var Labels = ['07-03-2021', '07-04-2021', '07-05-2021', '07-06-2021', '07-07-2021', '07-08-2021']
+    // var dataHandle = document.getElementById("tempSensor_chart").getContext("2d");
+    // var chart_handle;
+    // var grabData = $.get('/get_data')  // ajax call to grab json data
+    // grabData.done(function(set_y_axis){ // Function to run once data has been received
+    //   var chart_data = {
+    //     type: "line",
+    //     data: {
+    //        labels: Labels, // Utilize string of list that represents the data labels - xaxis -->
+    //        datasets: [
+    //          {
+    //            label: "Temperature (°F) vs. Time (s)",
+    //            data: set_y_axis,  // Use temp data points for y axis
+    //            fill: false, // TODO: Not sure if I need this - it will show exact resolution on web page?
+    //            borderColor: "rgb(230,230,250)", // Lavender border color - randomly selected
+    //            lineTension: 0.5  // Determines how "tight" corners will be when joining stretches of lines
+    //          }
+    //        ]
+    //      }
+    //   };
+    //   chart_handle = new Chart(dataHandle, chart_data);
+    // });
+    //
+    // function updateGraph(){
+    //   var grab_newData = $.get('/get_data');
+    //   grab_newData.done(function(set_y_axis){
+    //   var chart_data = {
+    //     type: "line",
+    //     data: {
+    //        labels: {{ Labels | safe }}, // Utilize string of list that represents the data labels - xaxis -->
+    //        datasets: [
+    //          {
+    //            label: "Temperature (°F) vs. Time (s)",
+    //            data: {{ set_y_axis | safe }},  // Use temp data points for y axis
+    //            fill: false, // TODO: Not sure if I need this - it will show exact resolution on web page?
+    //            borderColor: "rgb(230,230,250)", // Lavender border color - randomly selected
+    //            lineTension: 0.5  // Determines how "tight" corners will be when joining stretches of lines
+    //          }
+    //        ]
+    //      }
+    //   };
+    //   chart_handle.update();
+    //   });
+    // }
+    //
+    // setInterval('updateGraph()', 2000);  // Setup the ajax timing frequency in which calls should be made to update the graph of interest
+    // TODO: End
+
+    // function updateGraph() {
+    //   var grabData = $.get('get_data')  // ajax call to grab json data
+    // }
+    // TODO: start
+    // Update the data series of the graph
+    //function updateGraph() {
+      //tempSensor_chart.data.datasets[0].data
+    // var grabData = null;
+    // var dataHandle = document.getElementById("tempSensor_chart").getContext("2d");
+    // var tempSensor_chart = new Chart(dataHandle, {
+    //   type: "line",
+    //   data: {
+    //     labels: {{ line_labels | safe }}, // Utilize string of list that represents the data labels - xaxis -->
+    //     datasets: [
+    //       {
+    //         label: "Temperature (°F) vs. Time (s)",
+    //         data: {{ line_values | safe }},  // Use temp data points for y axis
+    //         fill: false, // TODO: Not sure if I need this - it will show exact resolution on web page?
+    //         borderColor: "rgb(230,230,250)", // Lavender border color - randomly selected
+    //         lineTension: 0.5  // Determines how "tight" corners will be when joining stretches of lines
+    //       }
+    //     ]
+    //   },
+    //   options: {
+    //     responsive: false  // Tells chart.js to use width and height of canvas to "draw"
+    //   }
+    // });
+    // // var updateDate = $.get('/home');
+    // //
+    // // getData.done(function(x_axis, y_axis){
+    // //   //var data_items = new Array{{recv_vals}};  // The data is returned as a tuple from python, so we need to assign .js array to grab elements
+    // //
+    // //
+    // // }
+    // function updateGraph(){
+    //   var updateData = &.get('/get_data')  // ajax call to grab data from data flask web page
+    //   updateData.done(function(recv_vals){
+    //     tempSensor_chart.data.datasets[0].data = recv_vals;
+    //   });
+    //
+    // }
+    //
+    // setInterval('updateGraph()', 2000);  // Setup the ajax timing frequency in which calls should be made to update the graph of interest
+    // TODO: end
+
+
+
+
+    // function updateGraph(){
+    //   // $.getJSON('/get_data', function(tempData_ran){
+    //   //   tempSensor_chart.data.datasets[0].data = tempData_ran;
+    //
+    //   $.ajax({  // Uses jquery api to make calls to grab json data from specific url, then write graph to graph url
+    //       type: "GET",
+    //       url: "/get_data",
+    //       data: data,
+    //       success: function(recv_vals) {
+    //
+    //         var x_axis = recv_vals[0];
+    //         var y_axis = recv_vals[1];
+    //         // Grab data from web server and graph
+    //
+    //       }
+    //   })
+    //
+    // }
+
+
+
+    // setInterval(
+    //   function()
+    //   {
+    //     $.getJSON(
+    //       %SCRIPT_ROOT + '/get_data',
+    //       {},
+    //       function(data)
+    //       {
+    //         $("#result").text(data.result);
+    //       });
+    //   },
+    //   1000);
   </script>
 </body>
 </html>

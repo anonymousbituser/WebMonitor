@@ -1,10 +1,11 @@
 from flask import Flask, jsonify, render_template, request
 import time
+import random
 
 app = Flask(__name__)  # Class handle to call Flask API
 
 
-@app.route('/')  # Decorator function - wraps a function for Flask to operate - maps url to return value
+@app.route('/', methods=['GET'])  # Decorator function - wraps a function for Flask to operate - maps url to return value
 def main_page():
     tempData = [  # TODO: Temperature data - use dummy data until function calls to Arduino are implemented
         ("07-03-2021", 75.5),
@@ -17,8 +18,26 @@ def main_page():
     #  Parse out data to be returned and rendered into html/javascript for chart graph on flask web page
     line_labels = [row[0] for row in tempData]
     line_values = [row[1] for row in tempData]
-
     return render_template("graph.html", labels=line_labels, values=line_values)
+    #return render_template("graph.html")
+
+@app.route('/get_data', methods=['GET'])  # Grabs data from flask app
+def get_data():
+    tempData_ran = [
+        ("07-03-2021", random.random()),
+        ("07-03-2021", random.random()),
+        ("07-03-2021", random.random()),
+        ("07-03-2021", random.random()),
+        ("07-03-2021", random.random()),
+        ("07-03-2021", random.random()),
+    ]
+    x_axis = [row[0] for row in tempData_ran]
+    y_axis = [row[1] for row in tempData_ran]
+    return jsonify(tempData_ran)
+    # return jsonify({'set_y_axis': y_axis}, {'set_x_axis': x_axis})
+    # return tempData_ran
+    # return jsonify(tempData_ran)  # Returns data into json format on route path
+    # return render_template("graph.html", lab)
     # return render_template('graph.html')
 
 
