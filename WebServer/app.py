@@ -9,11 +9,11 @@ app = Flask(__name__)  # Class handle to call Flask API
 def main_page():
     tempData = [  # TODO: Temperature data - use dummy data until function calls to Arduino are implemented
         ("07-03-2021", 75.5),
-        ("07-03-2021", 76.5),
-        ("07-03-2021", 77.5),
-        ("07-03-2021", 78.5),
-        ("07-03-2021", 79.5),
-        ("07-03-2021", 80.5),
+        ("07-04-2021", 76.5),
+        ("07-05-2021", 77.5),
+        ("07-06-2021", 76.5),
+        ("07-07-2021", 75.5),
+        ("07-08-2021", 49.5),
     ]
     #  Parse out data to be returned and rendered into html/javascript for chart graph on flask web page
     line_labels = [row[0] for row in tempData]

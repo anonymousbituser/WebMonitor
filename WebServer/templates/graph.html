@@ -39,7 +39,25 @@
       responsive: false  // Tells chart.js to use width and height of canvas to "draw"
     }
   };
-  var tempSensor_chart = new Chart(dataHandle, chart_data);
+  var tempSensor_chart = new Chart(dataHandle, chart_data);  // Creates chart object
+
+  function updateGraph(){
+    var grab_newData = $.get('/get_data');
+  }
+  setInterval('updateGraph()', 2000);
+  // Create function for jquery to call
+  // function updateGraph(){
+  //   &.ajax({
+  //     method: 'GET'
+  //     url:'/get_data'
+  //     dataType: 'json',
+  //   })
+  // }
+  //updateGraph();
+
+
+  // Setup the jquery timing frequency to make calls
+  //setInterval('updateGraph()', 2000);
 
 
   //setInterval('updateGraph()', 2000);  // Setup the ajax timing frequency in which calls should be made to update the graph of interest
