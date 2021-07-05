@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 import time
 import random
+import json
 
 app = Flask(__name__)  # Class handle to call Flask API
 
@@ -33,7 +34,35 @@ def get_data():
     ]
     x_axis = [row[0] for row in tempData_ran]
     y_axis = [row[1] for row in tempData_ran]
-    return jsonify(tempData_ran)
+    data = {"x_values": ['07-03-2021', '07-04-2021', '07-10-2021', '07-06-2021', '07-07-2021', '07-08-2021'],
+            "y_values": [random.random()*100.0, random.random()*100.0, random.random()*100.0, random.random()*100.0,
+                         random.random()*100.0, random.random()*100.0]}
+    # data['x_values'] = []
+    # data['x_values'].append(
+    #     {
+    #         '1': '07-03-2021',
+    #         '2': '07-04-2021',
+    #         '3': '07-05-2021',
+    #         '4': '07-06-2021',
+    #         '5': '07-07-2021',
+    #         '6': '07-08-2021'
+    #     }
+    # )
+    # data['y_values'] = []
+    # data['y_values'].append(
+    #     {
+    #         'val': random.random()*100.0,
+    #         '2': random.random()*100.0,
+    #         '3': random.random()*100.0,
+    #         '4': random.random()*100.0,
+    #         '5': random.random()*100.0,
+    #         '6': random.random()*100.0
+    #     }
+    # )
+    json_dataString = json.dumps(data)
+    # print(json_dataString)
+    return json_dataString
+    # return jsonify(tempData_ran)
     # return jsonify({'set_y_axis': y_axis}, {'set_x_axis': x_axis})
     # return tempData_ran
     # return jsonify(tempData_ran)  # Returns data into json format on route path

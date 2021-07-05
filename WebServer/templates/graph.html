@@ -9,7 +9,8 @@
   <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>-->
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>-->
   <script src='\static\chart.min.js'></script>  <!-- Javascript Chart API source for charting data-->
-  <script src='\static\jquery.min.js'></script>   <!-- Javascript query API source for dynamic charting-->
+  <!--<script src='\static\jquery.min.js'></script>-->   <!-- Javascript query API source for dynamic charting-->
+  <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script> <!-- Most recent jQuery CDN-->
 </head>
 
 <!--Core entry point for data to be put into-->
@@ -42,9 +43,77 @@
   var tempSensor_chart = new Chart(dataHandle, chart_data);  // Creates chart object
 
   function updateGraph(){
-    var grab_newData = $.get('/get_data');
+    // var grab_newData = $.get('/get_data');
+
+    // chart_data.
+    //tempSensor_chart.update(data)
+    //console.log(grab_newData);
+    var temp_data = [];
+    var json_data = JSON.stringify(temp_data);
+    $.ajax({
+
+        url : 'http://127.0.0.1:5000/get_data',
+        type : 'GET',
+        data : json_data,
+        dataType:'json',
+        success : function(data) {
+
+            //alert(data.y_values)
+            //alert(data['x_values']);
+            //var json_string_y = JSON.stringify(data.y_values)
+            //var json_string_x = JSON.stringify(data.x_values)
+            //var json_parse_y = JSON.parse(data.y_values)
+            //var json_parse_x = JSON.parse(data.x_values)
+            //alert(json_parse_y);
+            //chart_data.
+            tempSensor_chart.data.labels = data.x_values;
+            tempSensor_chart.data.datasets[0].data = data.y_values;
+            tempSensor_chart.update();
+            //console.log(data);
+        },
+        error : function(request,error)
+        {
+            alert("Request: "+JSON.stringify(request));
+        }
+    });
+    // stop
+    // $.ajax({
+    //   url: "/get_graph"
+    //   type: "GET",
+    //   dataType: "json",
+    //   success: function(graph_data){
+    //     console.log(graph_data);
+    //   }
+    // });
   }
-  setInterval('updateGraph()', 2000);
+  setInterval('updateGraph()', 3000);
+
+//   var GetChartData = function () {
+//     $.ajax({
+//         url: serviceUri,
+//         method: 'GET',
+//         dataType: 'json',
+//         success: function (d) {
+//            chartData = {
+//                 labels: d.AxisLabels,
+//                 datasets: [
+//                     {
+//                         fillColor: "rgba(220,220,220,0.5)",
+//                         strokeColor: "rgba(220,220,220,1)",
+//                         pointColor: "rgba(220,220,220,1)",
+//                         pointStrokeColor: "#fff",
+//                         data: d.DataSets[0]
+//                     }
+//                 ]
+//             };
+//
+//             max = Math.max.apply(Math, d.DataSets[0]);
+//             steps = 10;
+//
+//             respondCanvas();
+//         }
+//     });
+// };
   // Create function for jquery to call
   // function updateGraph(){
   //   &.ajax({
