@@ -1,5 +1,6 @@
+# This file will utilize a python-based web framework called Flask to call javascript APIs for web-based UI's
+# TODO: Wrap this script into a class to allow for higher level calls/threading in other scopes of the application
 from flask import Flask, jsonify, render_template, request
-import time
 import random
 import json
 
@@ -32,7 +33,7 @@ def get_data():
     return json_dataString
 
 
-# Press the green button in the gutter to run the script.
+# Used to for testing/troubleshooting purposes
 if __name__ == '__main__':
     app.run(debug=True)  # Main entry point - start web server
 

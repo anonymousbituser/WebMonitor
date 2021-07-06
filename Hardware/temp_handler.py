@@ -1,10 +1,11 @@
+# This file is responsible for receiving data from the Arduino/MCU serial port.
 import serial
 import time
 import datetime
 import json
 
 
-# Class used to read temp values from MCU
+# Class used to read temp values from MCU over serial port
 class TempSensor(object):
     def __init__(self):
         self.temp = 0;
@@ -33,8 +34,8 @@ class TempSensor(object):
         for i in range(self.dataset_rows):  # Create 2d array with datetime and temp values from arduino
             curr_datetime = datetime.datetime.now()  # Grab current date and time
             format_datetime = curr_datetime.strftime("(%m/%d/%Y)-[%H:%M:%S]")  # Format datetime
-            data_x_values[i] = format_datetime
-            data_y_values[i] = self.get_temp()
+            data_x_values[i] = format_datetime  # Create labels for x values in database
+            data_y_values[i] = self.get_temp()  # Grab data from MCU Serial port
             time.sleep(self.serial_loop_freq)
         data = {"x_values": data_x_values,  # Create series for json conversion
                 "y_values": data_y_values}
@@ -46,6 +47,7 @@ class TempSensor(object):
 if __name__ == '__main__':
     ts = TempSensor()
     ts.create_graph_dataset()
+    db = Da
     # while True:
     #     ts.get_temp()
     #     time.sleep(1)
