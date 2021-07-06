@@ -2,8 +2,6 @@
 # TODO: Wrap this script into a class to allow for higher level calls/threading in other scopes of the application
 from flask import Flask, jsonify, render_template, request
 from data_handler import ManageData as md
-import random
-import json
 
 app = Flask(__name__)   # Class handle to call Flask API
 data_manager = md()     # Main class used to create data management
@@ -30,14 +28,9 @@ def main_page():
 
 @app.route('/get_data', methods=['GET'])  # Grabs data from flask app
 def get_data():
-    # # Create temp data to use for flask graphing pipeline
-    # data = {"x_values": ['07-03-2021', '07-04-2021', '07-10-2021', '07-06-2021', '07-07-2021', '07-08-2021'],
-    #         "y_values": [random.random() * 100.0, random.random() * 100.0, random.random() * 100.0,
-    #                      random.random() * 100.0,
-    #                      random.random() * 100.0, random.random() * 100.0]}
-    # json_dataString = json.dumps(data)
-    jsonstring_data = data_manager.get_data_from_db()  # Grab data from database
-    return jsonstring_data
+    jsonstring_data = data_manager.get_data_from_db() # Grab data from database
+    print(jsonstring_data[0][0])
+    return jsonstring_data[0][0]  # Datatype is a list of tuples - need to break it out
 
 
 # Used to for testing/troubleshooting purposes
