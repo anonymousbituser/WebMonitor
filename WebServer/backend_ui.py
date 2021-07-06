@@ -1,10 +1,14 @@
 # This file will utilize a python-based web framework called Flask to call javascript APIs for web-based UI's
 # TODO: Wrap this script into a class to allow for higher level calls/threading in other scopes of the application
 from flask import Flask, jsonify, render_template, request
+from data_handler import ManageData as md
 import random
 import json
 
-app = Flask(__name__)  # Class handle to call Flask API
+app = Flask(__name__)   # Class handle to call Flask API
+data_manager = md()     # Main class used to create data management
+data_manager.create_data_flow()   # Create data generator
+
 
 # Decorator function - wraps a function for Flask to operate - maps url to return value
 @app.route('/', methods=['GET'])
@@ -23,17 +27,19 @@ def main_page():
     # Initialize chart.js based graph 
     return render_template("graph.html", labels=line_labels, values=line_values)
 
+
 @app.route('/get_data', methods=['GET'])  # Grabs data from flask app
 def get_data():
-    # Create temp data to use for flask graphing pipeline
-    data = {"x_values": ['07-03-2021', '07-04-2021', '07-10-2021', '07-06-2021', '07-07-2021', '07-08-2021'],
-            "y_values": [random.random()*100.0, random.random()*100.0, random.random()*100.0, random.random()*100.0,
-                         random.random()*100.0, random.random()*100.0]}
-    json_dataString = json.dumps(data)
-    return json_dataString
+    # # Create temp data to use for flask graphing pipeline
+    # data = {"x_values": ['07-03-2021', '07-04-2021', '07-10-2021', '07-06-2021', '07-07-2021', '07-08-2021'],
+    #         "y_values": [random.random() * 100.0, random.random() * 100.0, random.random() * 100.0,
+    #                      random.random() * 100.0,
+    #                      random.random() * 100.0, random.random() * 100.0]}
+    # json_dataString = json.dumps(data)
+    jsonstring_data = data_manager.get_data_from_db()  # Grab data from database
+    return jsonstring_data
 
 
 # Used to for testing/troubleshooting purposes
 if __name__ == '__main__':
-    app.run(debug=True)  # Main entry point - start web server
-
+    app.run(debug=True)  # Main entry point - start webserver

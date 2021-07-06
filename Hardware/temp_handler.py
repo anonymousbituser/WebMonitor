@@ -47,7 +47,3 @@ class TempSensor(object):
 if __name__ == '__main__':
     ts = TempSensor()
     ts.create_graph_dataset()
-    db = Da
-    # while True:
-    #     ts.get_temp()
-    #     time.sleep(1)
