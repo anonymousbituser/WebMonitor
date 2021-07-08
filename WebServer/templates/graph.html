@@ -26,16 +26,23 @@
         {
           label: "Temperature (°F) vs. Time (s)",
           data: {{ values | safe }},  // Use temp data points for y axis
-          fill: false, // TODO: Not sure if I need this - it will show exact resolution on web page?
-          borderColor: "rgb(230,230,250)", // Lavender border color - randomly selected
-          lineTension: 0.5  // Determines how "tight" corners will be when joining stretches of lines
+          fill: true, // TODO: Not sure if I need this - it will show exact resolution on web page?
+          borderColor: "rgb(255,0,0)", // border color - randomly selected
+          lineTension: 0.1  // Determines how "tight" corners will be when joining stretches of lines
         }
       ]
     },
     options: {
-      responsive: false  // Tells chart.js to use width and height of canvas to "draw"
-    }
+      responsive: false,  // Tells chart.js to use width and height of canvas to "draw"
+      plugins: {
+          title: {
+            display: true,
+            text: 'Temperature Sensor Webmonitor'
+          }
+        }
+      }
   };
+
   var tempSensor_chart = new Chart(dataHandle, chart_data);  // Creates chart object to be displayed on webpage
 
   function updateGraph(){  // Ajax function that will be called to update the webpage with new data
