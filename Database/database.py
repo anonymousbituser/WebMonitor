@@ -3,7 +3,7 @@ import sqlite3
 import WebMonitor.Hardware.temp_handler as tmp
 
 
-# SQL_lite-based class that will be used to store our sensor data types into a relational database
+# SQL_lite-based set of functions that will be used to store our sensor data types into a relational database
 def setup():  # Configure database
     # Create tables/setup database
     try:

@@ -8,7 +8,7 @@ import threading
 
 # Class used to read temp values from MCU over serial port
 class TempSensor(object):
-    def __init__(self):
+    def __init__(self):  # Initialize the class with all necessary objects/variables
         self.temp = 0;
         self.serial_port = 'COM3'       # Specific serial port connected to Arduino
         self.baud_rate = 9600           # Baud rate used on specific com port

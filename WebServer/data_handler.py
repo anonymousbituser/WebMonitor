@@ -7,7 +7,7 @@ import json
 
 # Class that will manage the flow of data between each component of the system.
 class ManageData(object):
-    def __init__(self):
+    def __init__(self):  # Initialize the class with all necessary objects/variables
         # self.db = WriteDatabase()  # Object of class utilized to interact with the database.
         self.data_ready = False  # Flag used to indicate when data can be read from the database.
 
