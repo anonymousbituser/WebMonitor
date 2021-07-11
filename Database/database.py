@@ -28,7 +28,7 @@ def get_dataset(temp_handle):  # Grabs dataset values from temp_handler
     return temperature, rpm
 
 
-def store_data_db():  # Grabs data from MCU and stores it into specific table within the database
+def write_database():  # Grabs data from MCU and stores it into specific table within the database
     setup()  # Setup database if the call has not already been made.
     temp_handle = tmp.TempSensor()
     while True:  # TODO: Pass flag thru thread

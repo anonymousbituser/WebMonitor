@@ -12,7 +12,7 @@ class ManageData(object):
         self.data_ready = False  # Flag used to indicate when data can be read from the database.
 
     def create_data_flow(self):  # Create data to be sent to the database, and allow other threads to read from the db
-        generate_dataThread = threading.Thread(target=store_data_db)  # Create thread handle
+        generate_dataThread = threading.Thread(target=write_database)  # Create thread handle
         generate_dataThread.start()  # Start thread to send data from hardware to database
         self.data_ready = True  # Indicate that data can be read from the database
 
@@ -23,6 +23,8 @@ class ManageData(object):
             no_data = None
             flaskData_temperature = json.dumps(no_data)  # Ensure data is proper json string datatype in case data_ready is false.
         return flaskData_temperature, flaskData_rpm
+
+    # def query_client(self): # Grab data from flask app
 
 
 # Used for debugging purposes

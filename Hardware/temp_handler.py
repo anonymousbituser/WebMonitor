@@ -57,7 +57,8 @@ class TempSensor(object):
                 "y_values": data_y_values}
         json_data_temperature = json.dumps(data)  # Convert series to json data for flask/chart.js
         return json_data_temperature, rpm_value
-        # return data
+
+    # def set_temp(self):  # TODO: Function that will take database values and pass via serial port to MCU ot utilize.
 
 
 # Used for debugging purposes
