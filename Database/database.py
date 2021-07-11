@@ -9,7 +9,11 @@ def setup():  # Configure database
     try:
         connection = sqlite3.connect('temperature_datasets.db')  # Creates connection to database
         cursor = connection.cursor()
+        # Create string table for sensor data
         cursor.execute('CREATE TABLE IF NOT EXISTS sensor_data (temp_data text)')
+        connection.commit()  # Push changes to database
+        # Create integer table for fan data
+        cursor.execute('CREATE TABLE IF NOT EXISTS fan_data (rpm text)')
         connection.commit()  # Push changes to database
         connection.close()
     except sqlite3.OperationalError as e:
@@ -18,7 +22,10 @@ def setup():  # Configure database
 
 def get_dataset(temp_handle):  # Grabs dataset values from temp_handler
     dataset_values = temp_handle.create_graph_dataset()
-    return dataset_values
+    # Break out tuple
+    temperature = dataset_values[0]
+    rpm = dataset_values[1]
+    return temperature, rpm
 
 
 def store_data_db():  # Grabs data from MCU and stores it into specific table within the database
@@ -27,8 +34,10 @@ def store_data_db():  # Grabs data from MCU and stores it into specific table wi
     while True:  # TODO: Pass flag thru thread
         connection = sqlite3.connect('temperature_datasets.db')  # Creates connection to database
         cursor = connection.cursor()
-        dataset = get_dataset(temp_handle)
-        cursor.execute("INSERT INTO sensor_data (temp_data) VALUES (?)", (dataset,))  # Store actual data
+        temperature, rpm = get_dataset(temp_handle)
+        cursor.execute("INSERT INTO sensor_data (temp_data) VALUES (?)", (temperature,))  # Store actual data
+        connection.commit()  # Push changes to database
+        cursor.execute("INSERT INTO fan_data (rpm) VALUES (?)", (rpm,))  # Store actual data
         connection.commit()  # Push changes to database
         connection.close()
 
@@ -38,9 +47,11 @@ def read_data_db():  # Reads data from the database
     cursor = connectDB.cursor()  # Cursor used to make all operations with the database
     # Grab the most recent dataset inside of the database - we want our UI to show the most recent data.
     cursor.execute('SELECT * FROM sensor_data ORDER BY temp_data DESC LIMIT 1')
-    getData = cursor.fetchall()
+    get_temperature = cursor.fetchall()
+    cursor.execute('SELECT * FROM fan_data ORDER BY rpm DESC LIMIT 1')
+    get_rpm = cursor.fetchall()
     connectDB.close()  # Close connection
-    return getData
+    return get_temperature, get_rpm
 
 
 # Used to for testing/troubleshooting purposes

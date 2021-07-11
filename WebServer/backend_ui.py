@@ -28,9 +28,10 @@ def main_page():
 
 @app.route('/get_data', methods=['GET'])  # Grabs data from flask app
 def get_data():
-    jsonstring_data = data_manager.get_data_from_db() # Grab data from database
-    print(jsonstring_data[0][0])
-    return jsonstring_data[0][0]  # Datatype is a list of tuples - need to break it out
+    jsonstring_temperature_data, rpm_data = data_manager.get_data_from_db()  # Grab data from database
+    print(jsonstring_temperature_data[0][0])
+    print("flask rpm data = ", rpm_data[0][0])
+    return jsonstring_temperature_data[0][0]  # Datatype is a list of tuples - need to break it out
 
 
 # Used to for testing/troubleshooting purposes
