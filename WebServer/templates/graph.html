@@ -16,13 +16,19 @@
 <!--Core body of the web page-->
 <body>
 <!--Create the canvas object for the graph-->
-  <canvas id="tempSensor_chart" width="900" height="400"></canvas>
+<div style="width: 75%">
+  <canvas id="tempSensor_chart" width="600" height="300"></canvas>
+</div>
+<div style="width: 25%">
+  <canvas id="rpm_chart" width="600" height="300"></canvas>
+</div>
   <!--Javascript code that will run/perform functionality for the chart-->
   <script>
 
   // Grab data from web server and graph
   var dataHandle = document.getElementById("tempSensor_chart").getContext("2d");  // Chart body reference to hold objects
-  var chart_data = {  // Main chart data type used to set chart elements
+  var barHandle = document.getElementById("rpm_chart").getContext("2d");  // Chart body reference to hold objects
+  var chart_data = {  // Main chart data type used to set chart elements - https://www.chartjs.org/docs/master/charts/line.html
     type: "line",
     data: {
       labels: {{ labels | safe }}, // Utilize string of list that represents the data labels - xaxis -->
@@ -47,6 +53,71 @@
       }
   };
 
+  var rpm_chart_data = {  // Main chart data type used to set chart elements - https://www.chartjs.org/docs/master/charts/line.html
+    type: "line",
+    data: {
+      labels: {{ labels | safe }}, // Utilize string of list that represents the data labels - xaxis -->
+      datasets: [
+        {
+          label: "'Fan RPM (3600 rpm = 100% duty cycle)'",
+          data: {{ values | safe }},  // Use temp data points for y axis
+          fill: true, // TODO: Not sure if I need this - it will show exact resolution on web page?
+          borderColor: "rgb(255,255,0)", // border color - randomly selected
+          lineTension: 0.1  // Determines how "tight" corners will be when joining stretches of lines
+        }
+      ]
+    },
+    options: {
+      responsive: false,  // Tells chart.js to use width and height of canvas to "draw"
+      plugins: {
+          title: {
+            display: true,
+            text: 'RPM Values'
+          }
+        }
+      }
+  };
+
+  // Bar graph datatype from chart.js library - https://www.chartjs.org/docs/master/charts/bar.html
+  // var rpm_bar_dataset = {
+  //   labels: [0],
+  //   datasets: [{
+  //
+  //     data: [0],
+  //
+  //
+  //
+  //     }]
+  // };
+  // Configuration of data used to initialize bar graph
+  // var bar_data = {
+  // type: 'bar',
+  // data:  {
+  //   labels: {{ 0 | safe }}, // Utilize string of list that represents the data labels - xaxis -->
+  //   datasets: [
+  //     {
+  //       label: 'Fan RPM (3600 = 100%)',
+  //       data: {{ 0 | safe }},  // Use temp data points for y axis
+  //       backgroundColor: [
+  //         'rgba(255, 100, 150, 0.25)'
+  //       ],
+  //       borderColor: [
+  //         'rgb(255, 100, 150)'
+  //       ],
+  //       borderWidth: 1
+  //     }
+  //   ]
+  // },
+  // options: {
+  //   scales: {
+  //     y: {
+  //       beginAtZero: true
+  //     }
+  //    }
+  //   },
+  // };
+
+  var rpm_graph = new Chart(barHandle, rpm_chart_data);  // Creates rpm graph objects to be displayed on the webpage
   var tempSensor_chart = new Chart(dataHandle, chart_data);  // Creates chart object to be displayed on webpage
 
   function updateGraph(){  // Ajax function that will be called to update the webpage with new data
@@ -58,10 +129,13 @@
         type : 'GET', // Use ajax get command - flask will create this method type to be utilized by jquery/ajax
         data : json_data,
         dataType:'json',
-        success : function(data) { // If the function is successfully completed, post the data
-            tempSensor_chart.data.labels = data.x_values;
-            tempSensor_chart.data.datasets[0].data = data.y_values;
+        success : function(temp_data) { // If the function is successfully completed, post the data
+            tempSensor_chart.data.labels = temp_data.x_values;
+            tempSensor_chart.data.datasets[0].data = temp_data.y_values;
             tempSensor_chart.update();
+            rpm_graph.data.labels = temp_data.x_values;
+            rpm_graph.data.datasets[0].data = temp_data.rpm_value;
+            rpm_graph.update();
             //console.log(data);
         },
         error : function(request,error) // If there is an error, report the error on the webpage

@@ -22,13 +22,13 @@ float min_temp = 76;              // Minimum temperature that will represent 0% 
 float temp_range;                 // Variable used to calculate the range in which pwm duty cycle % will be mappped to.
 const int pwm_max_bits = 255;     // 255=100% : 0=0% duty cycle for Arduino analogWrite() API call
 int   count_risingEdges = 0;      // Counter used to keep up with rising edge ticks for rpm calculation.
-int   rpm;                        // Variable used to convert electrical pulses to revolutions per minute for the fan.
+float   rpm;                      // Variable used to convert electrical pulses to revolutions per minute for the fan.
 
 
 // Initialization function
 void setup() {
   // Initialize serial port for testing/debugging
-  Serial.begin(9600);  // Initialize the serial port with specific baud rate
+  Serial.begin(115200);  // Initialize the serial port with specific baud rate
   pinMode(analogPWM_pin, OUTPUT);                                 // Setup analog pin to "output" mode in order to drive pwm signals
   pinMode(counterRPM_pin, INPUT);                                 // Setup RPM analog input line
   pinMode(digitalRelayHI_pin, OUTPUT);                            // Setup discrete line to "output" mode to drive HI/LO states
@@ -88,7 +88,7 @@ void loop() {
     sei();                                                        // Trigger the global interrupts
     delay(1000);                                                  // Delay loop by milisecond(s) interval to determine rpm.
     cli();                                                        // End the global interrupts
-    rpm = count_risingEdges/2;                                    // Each rising edge represents half of a rotation.
+    rpm = count_risingEdges/2.0;                                  // Each rising edge represents half of a rotation.
 
     // Write data to serial port for database thread to record
     Serial.println(tempValue);

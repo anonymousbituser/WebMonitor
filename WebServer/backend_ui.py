@@ -2,6 +2,7 @@
 # TODO: Wrap this script into a class to allow for higher level calls/threading in other scopes of the application
 from flask import Flask, jsonify, render_template, request
 from data_handler import ManageData as md
+import json
 
 app = Flask(__name__)   # Class handle to call Flask API
 data_manager = md()     # Main class used to create data management
@@ -29,9 +30,27 @@ def main_page():
 @app.route('/get_data', methods=['GET'])  # Grabs data from flask app
 def get_data():
     jsonstring_temperature_data, rpm_data = data_manager.get_data_from_db()  # Grab data from database
-    print(jsonstring_temperature_data[0][0])
-    print("flask rpm data = ", rpm_data[0][0])
-    return jsonstring_temperature_data[0][0]  # Datatype is a list of tuples - need to break it out
+
+    python_dict_convert = json.loads(jsonstring_temperature_data[0][0])
+    # print(python_dict_convert)
+    python_dict_convert["rpm_value"] = [rpm_data[0][0], rpm_data[0][0], rpm_data[0][0], rpm_data[0][0], rpm_data[0][0], rpm_data[0][0]]
+    # print(python_dict_convert)
+
+
+
+    # new_dataset = json.dumps(python_dict_convert)
+    new_dataset = python_dict_convert
+
+
+
+    # print(new_dataset)
+    # rpm_dataset = {"rpm_value": rpm_data[0][0]}
+    # print(rpm_dataset)
+    # parse_json_rpm = json.loads(rpm_dataset)
+    # new_dataset = parse_json_rpm.update(jsonstring_temperature_data[0][0])
+    # print(new_dataset)
+    return new_dataset
+    # return jsonstring_temperature_data[0][0]
 
 
 # Used to for testing/troubleshooting purposes
