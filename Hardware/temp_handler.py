@@ -40,25 +40,26 @@ class TempSensor(object):
     def create_graph_dataset(self):  # Creates dataset compatible for flask/chart.js calls
         data_x_values = [None]*self.dataset_rows  # Data values for graph - x axis
         data_y_values = [None]*self.dataset_rows  # Data values for graph - y axis
+        rpm_values = [None]*self.dataset_rows     # Data values for rpm graph - y axis
         for i in range(self.dataset_rows):  # Create 2d array with datetime and temp values from arduino
-
             while True:  # Read MCU serial port until data arrives
                 data_y_values[i] = self.get_data_serial_port()  # Grab data from MCU Serial port
                 if data_y_values[i] is not None:  # Stay in loop until we get an actual value
                     # If a data line has been read from serial port, the next value will be the rpm
-                    rpm_value = self.get_data_serial_port()
+                    rpm_values[i] = self.get_data_serial_port()
 
-                    print("data value = " + data_y_values[i], "\t rpm value = " + str(rpm_value))
+                    print("data value = " + data_y_values[i], "\t rpm value = " + str(rpm_values[i]))
                     break
             curr_datetime = datetime.datetime.now()  # Grab current date and time
             format_datetime = curr_datetime.strftime("(%m/%d/%Y)-[%H:%M:%S]")  # Format datetime
             data_x_values[i] = format_datetime  # Create labels for x values in database
             time.sleep(self.serial_loop_freq)
         data = {"x_values": data_x_values,  # Create series for json conversion
-                "y_values": data_y_values}
+                "y_values": data_y_values,
+                "rpm_values": rpm_values}
         json_data_temperature = json.dumps(data)  # Convert series to json data for flask/chart.js
-        rpm_value = str(rpm_value)  # Convert to string to match text datatype of database table
-        return json_data_temperature, rpm_value
+        # rpm_value = str(rpm_value)  # Convert to string to match text datatype of database table
+        return json_data_temperature
 
     # def set_temp(self):  # TODO: Function that will take database values and pass via serial port to MCU ot utilize.
 

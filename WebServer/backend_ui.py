@@ -29,17 +29,19 @@ def main_page():
 
 @app.route('/get_data', methods=['GET'])  # Grabs data from flask app
 def get_data():
-    jsonstring_temperature_data, rpm_data = data_manager.get_data_from_db()  # Grab data from database
-
-    python_dict_convert = json.loads(jsonstring_temperature_data[0][0])
+    # jsonstring_temperature_data, rpm_data = data_manager.get_data_from_db()  # Grab data from database
+    data = data_manager.get_data_from_db()  # Grab data from database
+    json_data = json.loads(data[0][0])
+    return json_data
+    # python_dict_convert = json.loads(jsonstring_temperature_data[0][0])
     # print(python_dict_convert)
-    python_dict_convert["rpm_value"] = [rpm_data[0][0], rpm_data[0][0], rpm_data[0][0], rpm_data[0][0], rpm_data[0][0], rpm_data[0][0]]
+    # python_dict_convert["rpm_value"] = [rpm_data[0][0], rpm_data[0][0], rpm_data[0][0], rpm_data[0][0], rpm_data[0][0], rpm_data[0][0]]
     # print(python_dict_convert)
 
 
 
     # new_dataset = json.dumps(python_dict_convert)
-    new_dataset = python_dict_convert
+    # new_dataset = python_dict_convert
 
 
 
@@ -49,7 +51,7 @@ def get_data():
     # parse_json_rpm = json.loads(rpm_dataset)
     # new_dataset = parse_json_rpm.update(jsonstring_temperature_data[0][0])
     # print(new_dataset)
-    return new_dataset
+    # return new_dataset
     # return jsonstring_temperature_data[0][0]
 
 

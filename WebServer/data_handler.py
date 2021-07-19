@@ -18,12 +18,15 @@ class ManageData(object):
 
     def get_data_from_db(self):  # Grabs data from database
         if self.data_ready:
-            flaskData_temperature, flaskData_rpm = read_data_db()  # Grab dataset to be sent to flask framework
+            # flaskData_temperature, flaskData_rpm = read_data_db()  # Grab dataset to be sent to flask framework
+            data = read_data_db()  # Grab dataset to be sent to flask framework
         else:
             no_data = None
             # Ensure data is proper json string datatype in case data_ready is false.
-            flaskData_temperature = json.dumps(no_data)
-        return flaskData_temperature, flaskData_rpm
+            # flaskData_temperature = json.dumps(no_data)
+            data = json.dumps(no_data)
+        # return flaskData_temperature, flaskData_rpm
+        return data
 
     # def query_client(self): # Grab data from flask app
 
