@@ -62,3 +62,15 @@
  ##### void loop(); // Main loop to perform operations and grab data from sensor(s)
  ### Remaining Features/Efforts
 The remaining feature that would be ideal to implement would be dynamic pwm duty cycle ranges mapped to temperature ranges.  Currently, the Arduino will turn on the fan power relays when 76° is reached, and will drive the pwm of the fan at a percentage of 0% to 100% from 76° to 80°.  A nice feature would be to allow the user to set the temperature min and max values for the "mapped" dynamic pwm percentage.  There exist all the infrastructure to do so - rpm measurements are captured by the hardware, sent to the database, and retrieved from flask.  The next steps are to create the proper html/javascript objects to display on the main webpage/userinterface and display rpm dynamically via the same ajax routine that updates the chart on the main page.
+## Needed Environment
+Anaconda 3.9 Python interpreter is needed in order to run the application. As long as the interpreter is installed on the host machine and is within the environment path, along with all of the libraries (further explained below), the application will run simply from a terminal, or a Python IDE that can access the interpreter. 
+## Needed libraries/resources
+All source files include all of the necessary libraries that are imported into each application. All required libraries can be installed with the following commands once Anaconda 3.9 Python interpreter is installed on the system:
+### pip install flask
+### pip install pyserial
+### pip install sqlite3
+### Arduino IDE
+The user will need the Arduino IDE and to install TimeLib.h in order to compile and run the application on an Arduino Uno R3.  The user will also need a pulse width modulated +12v fan, along with an 8 channel 5v relay board - these hardware assets are required to receive data for the database.
+## Process to run
+Once all of the necessary libraries and resources above are present, the user can then access a terminal and type ./backend_ui.py, or run the same script inside of a Python IDE with the above mentioned interpreter, and the application will begin to run.  The embedded hardware will always run once the temp_acquisition.ino file is flashed onto the mcu of the Arduino.
+
